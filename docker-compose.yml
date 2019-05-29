@@ -1,0 +1,69 @@
+--- 
+version: "3"
+services: 
+  chronograf: 
+    depends_on: 
+      - influxdb
+    entrypoint: "chronograf --influxdb-url=http://influxdb:8086"
+    image: "chronograf:latest"
+    ports: 
+      - "8889:8888"
+  influxdb: 
+    environment: 
+      INFLUXDB_DB: collectd_db
+      INFLUXDB_USER: indices_user
+      INFLUXDB_USER_PASSWORD: indices_manager
+    image: "influxdb:latest"
+    # ports: 
+    #   - "8087:8086"
+  pycollector: 
+    depends_on: 
+      - rabbitmq-server
+    build: 
+      context: ./pycollector
+      dockerfile: dockerfile-py
+    command: sh run_cmd.sh
+    # entrypoint: ["/bin/bash", "-c", "'sleep 15 && python -u parsingthread.py'"] 
+    working_dir: /usr/src/app
+    # image: "bitnami/python:latest"
+    # volumes: 
+    #   - "./pycollector:/opt"
+
+  rabbitmq-server: 
+    depends_on: 
+      - influxdb
+    environment: 
+      # RABBITMQ_DEFAULT_PASS: indices_manager
+      # RABBITMQ_DEFAULT_USER: indices_user
+      RABBITMQ_DEFAULT_VHOST: /
+      # RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit channel_max 0"
+    hostname: rabbitmq-server
+    build: 
+      context: ./rabbitmqconf
+      dockerfile: dockerfile-rq
+    # image: rabbitmq:3.7.13-management
+    labels: 
+      NAME: rabbitmq-server
+    ports: 
+      - "15673:15672"
+      - "5673:5672"
+      - "4370:4369"
+
+  # old-rabbitmq-server: 
+  #   depends_on: 
+  #     - influxdb
+  #   environment: 
+  #     # RABBITMQ_DEFAULT_PASS: indices_manager
+  #     # RABBITMQ_DEFAULT_USER: indices_user
+  #     RABBITMQ_DEFAULT_VHOST: /
+  #     # RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+  #     RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit channel_max 0"
+  #   hostname: rabbitmq-server
+  #   image: rabbitmq:3.7.13-management
+  #   labels: 
+  #     NAME: rabbitmq-server
+  #   ports: 
+  #     - "15673:15672"
+  #     - "5673:5672"
+  #     - "4370:4369"

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+sleep 10
+rabbitmqctl add_user indices_user indices_manager
+rabbitmqctl  set_permissions -p / indices_user ".*" ".*" ".*"
+rabbitmqctl purge_queue "collectd_queue"
+
+rabbitmqadmin declare exchange --vhost=/ name=collectd-exchange type=direct
+rabbitmqadmin declare queue --vhost=/ name=collectd_queue durable=true
+rabbitmqctl set_policy Ten "^collectd_queues$" '{"max-length-bytes":1000000}' --apply-to queues
+
+

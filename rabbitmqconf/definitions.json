@@ -1,0 +1,77 @@
+{
+	"rabbit_version": "3.7.13",
+	"users": [{
+		"name": "indices_user",
+		"password_hash": "H1SIHBjSnCZZ6kalxKmkCLigg1vqHDlDHxD+abSllQd7KxsE",
+		"hashing_algorithm": "rabbit_password_hashing_sha256",
+		"tags": ""
+	}, {
+		"name": "guest",
+		"password_hash": "G20MrsH72KYlATMW9djraVEa+tF7jjlCwAcsFvb8WDCU2IhX",
+		"hashing_algorithm": "rabbit_password_hashing_sha256",
+		"tags": "administrator"
+	}],
+	"vhosts": [{
+		"name": "/"
+	}],
+	"permissions": [{
+		"user": "guest",
+		"vhost": "/",
+		"configure": ".*",
+		"write": ".*",
+		"read": ".*"
+	}, {
+		"user": "indices_user",
+		"vhost": "/",
+		"configure": ".*",
+		"write": ".*",
+		"read": ".*"
+	}],
+	"topic_permissions": [],
+	"parameters": [{
+		"value": {
+			"max-connections": 4000
+		},
+		"vhost": "/",
+		"component": "vhost-limits",
+		"name": "limits"
+	}],
+	"global_parameters": [{
+		"name": "cluster_name",
+		"value": "rabbit@rabbitmq-server"
+	}],
+	"policies": [{
+		"vhost": "/",
+		"name": "Ten",
+		"pattern": "^collectd_queues$",
+		"apply-to": "queues",
+		"definition": {
+			"max-length-bytes": 1000000
+		},
+		"priority": 0
+	}],
+	"queues": [{
+		"name": "collectd_queue",
+		"vhost": "/",
+		"durable": true,
+		"auto_delete": false,
+		"arguments": {}
+	}],
+	"exchanges": [{
+		"name": "collectd-exchange",
+		"vhost": "/",
+		"type": "direct",
+		"durable": true,
+		"auto_delete": false,
+		"internal": false,
+		"arguments": {}
+	}],
+	"bindings": [{
+		"source": "collectd-exchange",
+		"vhost": "/",
+		"destination": "collectd_queue",
+		"destination_type": "queue",
+		"routing_key": "indices-perf-key",
+		"arguments": {}
+	}]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "influx",
+  "host": "influxdb",
+  "port": "8086",
+  "user": "indices_user",
+  "password": "indices_manager",
+  "database": "collectd_db"
+}
