@@ -37,7 +37,7 @@ services:
       # RABBITMQ_DEFAULT_USER: indices_user
       RABBITMQ_DEFAULT_VHOST: /
       # RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
-      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit channel_max 0"
+      # RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit channel_max 0"
     hostname: rabbitmq-server
     build: 
       context: ./rabbitmqconf
