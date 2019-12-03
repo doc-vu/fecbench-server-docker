@@ -13,7 +13,7 @@ services:
       INFLUXDB_DB: collectd_db
       INFLUXDB_USER: indices_user
       INFLUXDB_USER_PASSWORD: indices_manager
-    image: "influxdb:latest"
+    image: "influxdb:1.7.8"
     # ports: 
     #   - "8087:8086"
   pycollector: 
