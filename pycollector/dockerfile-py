@@ -2,9 +2,11 @@ FROM python:3.6
 
 WORKDIR /usr/src/app
 
-COPY requirement.txt ./
-RUN pip3 install --no-cache-dir -r requirement.txt
+RUN git clone https://github.com/doc-vu/pycollectdsubscriber.git
 
-COPY . .
+COPY *.json pycollectdsubscriber/
+WORKDIR /usr/src/app/pycollectdsubscriber
+
+RUN pip3 install --no-cache-dir -r requirement.txt
 
 CMD /bin/bash
