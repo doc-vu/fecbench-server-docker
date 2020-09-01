@@ -1,2 +1,0 @@
-indices_perf_host cs:GAUGE:0:UZ, page-faults:GAUGE:0:U, major-faults:GAUGE:0:U
-indices_perf_docker cs:GAUGE:0:UZ, page-faults:GAUGE:0:U
